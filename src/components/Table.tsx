@@ -1,9 +1,13 @@
 import { useState } from "react";
 import { CustomTable } from "../types/types";
-import { filterByKey } from "../utils/helpers";
+import { sortByKey } from "../utils/helpers";
 
 const Table = (props: CustomTable) => {
   const [query, setQuery] = useState("");
+  const [sortLabel, setSortLabel] = useState("");
+  const [order, setOrder] = useState("des");
+  const [isSorted, setIsSorted] = useState(false);
+
   // Validation that data is an array
   const { data, skipFirstKey } = props;
   if (!Array.isArray(data)) return <p>Input an Array</p>;
@@ -27,14 +31,23 @@ const Table = (props: CustomTable) => {
   }
 
   // Filter data with search input
-  const filteredData = validatedData.filter(
-    (item) =>
-      Object.keys(item)
-        .toString()
-        .toLowerCase()
-        .includes(query.toLowerCase()) ||
-      Object.values(item).toString().toLowerCase().includes(query.toLowerCase())
+  const filteredData = validatedData.filter((item) =>
+    Object.values(item).toString().toLowerCase().includes(query.toLowerCase())
   );
+
+  const sortHandler = (event: React.MouseEvent<HTMLElement>) => {
+    const label = event.currentTarget.innerText;
+    setIsSorted(true);
+    if (sortLabel !== label) {
+      setOrder("asc");
+      setSortLabel(label);
+    } else {
+      const newOrder = order === "asc" ? "des" : "asc";
+      setOrder(newOrder);
+    }
+  };
+
+  // sortByKey(filteredData, sortLabel, order);
 
   // display table
   return (
@@ -48,17 +61,17 @@ const Table = (props: CustomTable) => {
         <thead>
           <tr>
             {firstDataKeys.map((item, index) => (
-              <th
-                key={item + index}
-                onClick={(event) => filterByKey(validatedData, event)}
-              >
+              <th key={item + index} onClick={(event) => sortHandler(event)}>
                 {item}
               </th>
             ))}
           </tr>
         </thead>
         <tbody>
-          {filteredData.map((item, index) => (
+          {(isSorted
+            ? sortByKey(filteredData, sortLabel, order)
+            : filteredData
+          ).map((item, index) => (
             <tr key={Math.random() + index}>
               {firstDataKeys.map((value) => (
                 <td key={value + index}>{item[value]}</td>
