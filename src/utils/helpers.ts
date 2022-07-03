@@ -3,33 +3,18 @@ export const sortByKey = (
   key: string,
   order: string
 ) => {
-  const sortFunction = (
-    a: Record<string, string>,
-    b: Record<string, string>,
-    order: string
-  ) => {
-    if (key === "Street") {
-      const streetNumberA = +a[key].split(" ")[0];
-      const streetNumberB = +b[key].split(" ")[0];
-
-      if (order === "asc") {
-        return streetNumberA - streetNumberB;
-      } else {
-        return streetNumberB - streetNumberA;
-      }
+  const sortedData = data.sort((a, b) => {
+    if (order === "asc") {
+      return a[key].localeCompare(b[key], undefined, {
+        numeric: true,
+        sensitivity: "base",
+      });
     } else {
-      if (order === "asc") {
-        if (a[key] < b[key]) return -1;
-        if (a[key] > b[key]) return 1;
-        return 0;
-      } else {
-        if (a[key] < b[key]) return 1;
-        if (a[key] > b[key]) return -1;
-        return 0;
-      }
+      return b[key].localeCompare(a[key], undefined, {
+        numeric: true,
+        sensitivity: "base",
+      });
     }
-  };
-
-  const sortedData = data.sort((a, b) => sortFunction(a, b, order));
+  });
   return sortedData;
 };

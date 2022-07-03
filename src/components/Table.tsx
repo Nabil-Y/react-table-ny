@@ -7,9 +7,9 @@ const Table = (props: CustomTable) => {
   const [sortLabel, setSortLabel] = useState("");
   const [order, setOrder] = useState("des");
   const [isSorted, setIsSorted] = useState(false);
+  const { data, skipFirstKey } = props;
 
   // Validation that data is an array
-  const { data, skipFirstKey } = props;
   if (!Array.isArray(data)) return <p>Input an Array</p>;
 
   // Validate that data is an array of object
@@ -46,8 +46,6 @@ const Table = (props: CustomTable) => {
       setOrder(newOrder);
     }
   };
-
-  // sortByKey(filteredData, sortLabel, order);
 
   // display table
   return (
