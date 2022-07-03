@@ -1,13 +1,19 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { CustomTable } from "../types/types";
 import { sortByKey } from "../utils/helpers";
 
 const Table = (props: CustomTable) => {
   const [query, setQuery] = useState("");
+
   const [sortLabel, setSortLabel] = useState("");
   const [order, setOrder] = useState("des");
   const [isSorted, setIsSorted] = useState(false);
-  const { data, skipFirstKey } = props;
+
+  const [page, setPage] = useState(1);
+  const [showPageSelector, setShowPageSelector] = useState(false);
+  const [rowsPerPages, setRowPerPages] = useState(10);
+
+  const { data, skipFirstKey, title, customClasses, possibleRows } = props;
 
   // Validation that data is an array
   if (!Array.isArray(data)) return <p>Input an Array</p>;
@@ -35,6 +41,7 @@ const Table = (props: CustomTable) => {
     Object.values(item).toString().toLowerCase().includes(query.toLowerCase())
   );
 
+  //sort handler
   const sortHandler = (event: React.MouseEvent<HTMLElement>) => {
     const label = event.currentTarget.innerText;
     setIsSorted(true);
@@ -47,29 +54,65 @@ const Table = (props: CustomTable) => {
     }
   };
 
+  // Setup pagination
+  const possibleRowsPerPage = possibleRows
+    ? possibleRows.slice(0, 4)
+    : [10, 25, 50, 100];
+  const numberOfPages = Math.ceil(filteredData.length / rowsPerPages);
+  const pages = [];
+  for (let i = 0; i < numberOfPages; i++) pages.push(i + 1);
+  const startOfPage = (page - 1) * rowsPerPages;
+  const endOfPage = startOfPage + rowsPerPages;
+
+  // select rows per page function
+  const selectRowsPerPage = (event: React.MouseEvent<HTMLLIElement>) => {
+    const rows = +event.currentTarget.innerText;
+    setRowPerPages(rows);
+    setPage(1);
+  };
+
+  // final operations for table data
+  const processedData = isSorted
+    ? sortByKey(filteredData, sortLabel, order).slice(startOfPage, endOfPage)
+    : filteredData.slice(startOfPage, endOfPage);
+
   // display table
   return (
-    <div>
-      <input
-        type="text"
-        value={query}
-        onChange={(e) => setQuery(e.target.value)}
-      />
+    <section className={`table ${customClasses}`}>
+      <header>
+        {title ? <h2>{title}</h2> : ""}
+        <div className="search">
+          <label htmlFor="searchbar">Search:</label>{" "}
+          <input
+            id="searchbar"
+            type="text"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+          />
+        </div>
+      </header>
       <table>
         <thead>
           <tr>
             {firstDataKeys.map((item, index) => (
-              <th key={item + index} onClick={(event) => sortHandler(event)}>
+              <th
+                key={item + index}
+                onClick={(event) => sortHandler(event)}
+                className={
+                  sortLabel === item && order === "asc"
+                    ? "sorted-asc"
+                    : sortLabel === item && order === "des"
+                    ? "sorted-des"
+                    : ""
+                }
+              >
                 {item}
               </th>
             ))}
           </tr>
         </thead>
         <tbody>
-          {(isSorted
-            ? sortByKey(filteredData, sortLabel, order)
-            : filteredData
-          ).map((item, index) => (
+          {processedData.map((item, index) => (
             <tr key={Math.random() + index}>
               {firstDataKeys.map((value) => (
                 <td key={value + index}>{item[value]}</td>
@@ -78,7 +121,45 @@ const Table = (props: CustomTable) => {
           ))}
         </tbody>
       </table>
-    </div>
+      <footer>
+        <div className="page-selector">
+          <p>
+            Showing {startOfPage + 1}/
+            {endOfPage > filteredData.length ? filteredData.length : endOfPage}{" "}
+            from {filteredData.length}{" "}
+          </p>
+          Pages{" "}
+          {pages.map((item) => (
+            <button
+              key={"page" + item}
+              onClick={() => setPage(item)}
+              className={page === item ? "selected-page" : ""}
+            >
+              {item}
+            </button>
+          ))}
+        </div>
+        <div className="rows-selector">
+          Show{" "}
+          <button
+            onFocus={() => setShowPageSelector(true)}
+            onBlur={() => setShowPageSelector(false)}
+          >
+            {rowsPerPages}
+          </button>{" "}
+          rows per page
+          {showPageSelector && (
+            <ul className="rows-list">
+              {possibleRowsPerPage.map((item) => (
+                <li key={"rows" + item} onMouseDown={selectRowsPerPage}>
+                  {item}
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      </footer>
+    </section>
   );
 };
 

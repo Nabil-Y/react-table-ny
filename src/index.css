@@ -1,13 +1,128 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+body {
+  margin: 0;
+  font-family: inherit;
+  overflow-x: hidden;
+}
+
+header,
+footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+@media screen and (max-width: 640px) {
+  header,
+  footer {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+button {
+  background: #ccc;
+  border-radius: 2px;
+  overflow: hidden;
+  cursor: pointer;
+  border: none;
+  padding: 4px 8px;
+  margin: 0 2px;
+}
+
+button:hover {
+  background: #a09f9f;
+}
+
+input {
+  outline: none;
+}
+
+ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+td,
+th {
+  padding: 0.5rem;
+  text-align: center;
+}
+
+table {
+  display: block;
+  padding: 1rem;
+  overflow-x: scroll;
+  white-space: nowrap;
+}
+
+.search,
+.table,
+.page-selector,
+.rows-selector {
+  padding: 1rem;
+}
+
+.table {
+  max-width: 1000px;
+}
+
+.rows-selector {
+  position: relative;
+}
+
+.rows-list {
+  position: absolute;
+  display: flex;
+  overflow: hidden;
+  background: #ccc;
+  border-radius: 2px;
+  margin-left: 1.5rem;
+}
+
+.rows-list li {
+  cursor: pointer;
+  padding: 5px;
+}
+
+.rows-list li:last-child {
+  padding-bottom: 2px;
+}
+
+.rows-list li:hover {
+  background: #a09f9f;
+}
+
+.sorted-asc,
+.sorted-des {
+  position: relative;
+}
+
+.sorted-asc::after,
+.sorted-des::after {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: -3px;
+  font-size: 8px;
+}
+
+.sorted-asc::after {
+  content: "▲";
+}
+
+.sorted-des::after {
+  content: "▼";
+}
+
+.selected-page {
+  background-color: transparent;
+  font-weight: bold;
+  pointer-events: none;
 }

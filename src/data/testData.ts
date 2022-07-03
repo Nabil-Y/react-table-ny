@@ -1,6 +1,6 @@
+/* c8 ignore next */
 export const wrongData = ["five", "two", "three"];
-
-export const wrongDataObject = [
+export const wrongDataObjects = [
   {
     id: "0",
     firstName: "Jacques",
@@ -13,27 +13,8 @@ export const wrongDataObject = [
     id: "2",
     lastName: "Jean-Jacques",
   },
+  /* c8 ignore next */
 ];
-
-export const goodData = [
-  {
-    id: "0",
-    firstName: "Jacques",
-  },
-  {
-    id: "1",
-    firstName: "Roberts",
-  },
-  {
-    id: "2",
-    firstName: "Jean-Jacques",
-  },
-  {
-    id: "3",
-    firstName: "Harry",
-  },
-];
-
 export const EMPLOYEES = [
   {
     id: "0",
