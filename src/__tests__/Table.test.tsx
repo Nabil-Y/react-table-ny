@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { wrongData, wrongDataObjects, EMPLOYEES } from "../data/testData";
 import Table from "../components/Table";
 
@@ -44,9 +44,33 @@ describe("On render with appropriate data", () => {
   });
 
   it("with skipFirstKey === true, it shouldn't display the first key (id) ", () => {
-    render(<Table data={EMPLOYEES} skipFirstKey possibleRows={[2]} />);
+    render(<Table data={EMPLOYEES} skipFirstKey />);
 
     expect(screen.getByText(/First Name/i)).toBeTruthy();
     expect(screen.queryByText(/Id/i)).toBeNull();
+  });
+
+  it("should display Ronald and Marc first, then Bruno and Henri after sorting by First Name, then Ronald and scott when sorting by first name again", () => {
+    render(<Table data={EMPLOYEES} skipFirstKey possibleRows={[2]} />);
+
+    expect(screen.getByText(/Ronald/i)).toBeTruthy();
+    expect(screen.getByText(/Marc/i)).toBeTruthy();
+
+    const firstNameKey = screen.getByText(/First name/i);
+
+    fireEvent.click(firstNameKey);
+
+    // expect(screen.findByText(/Bruno/i)).toBeTruthy();
+
+    // expect(screen.queryByText(/Ronald/i)?.innerText).toBeUndefined();
+    // expect(screen.queryByText(/Marc/i)?.innerText).toBeUndefined();
+    // expect(screen.getByText(/Bruno/i)).toBeTruthy();
+    // expect(screen.getByText(/Henri/i)).toBeTruthy();
+
+    // fireEvent.click(firstNameKey);
+    // expect(screen.queryByText(/Bruno/i)?.innerText).toBeUndefined();
+    // expect(screen.queryByText(/Henri/i)?.innerText).toBeUndefined();
+    // expect(screen.getByText(/Ronald/i)).toBeTruthy();
+    // expect(screen.getByText(/Scott/i)).toBeTruthy();
   });
 });

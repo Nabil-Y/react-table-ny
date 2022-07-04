@@ -3,16 +3,6 @@ import { CustomTable } from "../types/types";
 import { sortByKey } from "../utils/helpers";
 
 const Table = (props: CustomTable) => {
-  const [query, setQuery] = useState("");
-
-  const [sortLabel, setSortLabel] = useState("");
-  const [order, setOrder] = useState("des");
-  const [isSorted, setIsSorted] = useState(false);
-
-  const [page, setPage] = useState(1);
-  const [showPageSelector, setShowPageSelector] = useState(false);
-  const [rowsPerPages, setRowPerPages] = useState(10);
-
   const { data, skipFirstKey, title, customClasses, possibleRows } = props;
 
   // Validation that data is an array
@@ -37,11 +27,17 @@ const Table = (props: CustomTable) => {
   }
 
   // Filter data with search input
+  const [query, setQuery] = useState("");
+
   const filteredData = validatedData.filter((item) =>
     Object.values(item).toString().toLowerCase().includes(query.toLowerCase())
   );
 
   //sort handler
+  const [sortLabel, setSortLabel] = useState("");
+  const [order, setOrder] = useState("");
+  const [isSorted, setIsSorted] = useState(false);
+
   const sortHandler = (event: React.MouseEvent<HTMLElement>) => {
     const label = event.currentTarget.innerText;
     setIsSorted(true);
@@ -55,14 +51,20 @@ const Table = (props: CustomTable) => {
   };
 
   // Setup pagination
-  const possibleRowsPerPage = possibleRows
-    ? possibleRows.slice(0, 4)
-    : [10, 25, 50, 100];
-  const numberOfPages = Math.ceil(filteredData.length / rowsPerPages);
+  const possibleRowsPerPage =
+    possibleRows && possibleRows.length > 0
+      ? possibleRows.slice(0, 4)
+      : [2, 20, 50, 100];
+
+  const [page, setPage] = useState(1);
+  const [showPageSelector, setShowPageSelector] = useState(false);
+  const [rowsPerPage, setRowPerPages] = useState(possibleRowsPerPage[0]);
+
+  const numberOfPages = Math.ceil(filteredData.length / rowsPerPage);
   const pages = [];
   for (let i = 0; i < numberOfPages; i++) pages.push(i + 1);
-  const startOfPage = (page - 1) * rowsPerPages;
-  const endOfPage = startOfPage + rowsPerPages;
+  const startOfPage = (page - 1) * rowsPerPage;
+  const endOfPage = startOfPage + rowsPerPage;
 
   // select rows per page function
   const selectRowsPerPage = (event: React.MouseEvent<HTMLLIElement>) => {
@@ -145,7 +147,7 @@ const Table = (props: CustomTable) => {
             onFocus={() => setShowPageSelector(true)}
             onBlur={() => setShowPageSelector(false)}
           >
-            {rowsPerPages}
+            {rowsPerPage}
           </button>{" "}
           rows per page
           {showPageSelector && (

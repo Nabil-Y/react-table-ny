@@ -5,12 +5,12 @@ export const sortByKey = (
 ) => {
   const sortedData = data.sort((a, b) => {
     if (order === "asc") {
-      return a[key].localeCompare(b[key], undefined, {
+      return a[key]?.localeCompare(b[key], undefined, {
         numeric: true,
         sensitivity: "base",
       });
     } else {
-      return b[key].localeCompare(a[key], undefined, {
+      return b[key]?.localeCompare(a[key], undefined, {
         numeric: true,
         sensitivity: "base",
       });
