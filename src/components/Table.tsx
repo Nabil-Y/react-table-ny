@@ -144,6 +144,7 @@ const Table = (props: CustomTable) => {
         <div className="rows-selector">
           Show{" "}
           <button
+            title="select"
             onFocus={() => setShowPageSelector(true)}
             onBlur={() => setShowPageSelector(false)}
           >

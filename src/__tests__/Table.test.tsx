@@ -50,22 +50,23 @@ describe("On render with appropriate data", () => {
     expect(screen.getByText(/Marc/i)).toBeTruthy();
   });
 
-  it("with 2 rows per page, should display Bruno and Henri after sorting by First Name, then Ronald and scott when sorting by first name again", () => {
+  it("with 2 rows per page, should display Bruno and Henri after sorting by First Name, then Ronald and scott when sorting by first name again", async () => {
     render(<Table data={EMPLOYEES} skipFirstKey possibleRows={[2]} />);
-    const firstNameKey = screen.getByText(/First name/i);
-    fireEvent.click(firstNameKey);
 
-    // expect(screen.findByText(/Bruno/i)).toBeTruthy();
+    fireEvent.click(screen.getByText(/First name/i));
+    // Ronald is null, Bruno is true
 
-    // expect(screen.queryByText(/Ronald/i)?.innerText).toBeUndefined();
-    // expect(screen.queryByText(/Marc/i)?.innerText).toBeUndefined();
-    // expect(screen.getByText(/Bruno/i)).toBeTruthy();
-    // expect(screen.getByText(/Henri/i)).toBeTruthy();
+    // expect(screen.queryByText(/Ronald/i)).toBeNull();
+    // expect(await screen.findByText(/Bruno/i)).toBe(1);q
+    // expect(await screen.findByText(/Henri/i)).toBe(1);
+    // expect(screen.findByText(/First name/i)).toBe("1");
 
-    // fireEvent.click(firstNameKey);
+    fireEvent.click(screen.getByText(/First name/i));
+    // Bruno is null, Scott or Ronald is true
+
     // expect(screen.queryByText(/Bruno/i)?.innerText).toBeUndefined();
     // expect(screen.queryByText(/Henri/i)?.innerText).toBeUndefined();
-    // expect(screen.getByText(/Ronald/i)).toBeTruthy();
-    // expect(screen.getByText(/Scott/i)).toBeTruthy();
+    // expect(screen.findByText(/Ronald/i)).toBeTruthy();
+    // expect(screen.findByText(/Scott/i)).toBeTruthy();
   });
 });
