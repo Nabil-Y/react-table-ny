@@ -43,21 +43,16 @@ describe("On render with appropriate data", () => {
     expect(screen.queryByText(/Id/i)).toBeNull();
   });
 
-  it("with skipFirstKey === true, it shouldn't display the first key (id) ", () => {
-    render(<Table data={EMPLOYEES} skipFirstKey />);
-
-    expect(screen.getByText(/First Name/i)).toBeTruthy();
-    expect(screen.queryByText(/Id/i)).toBeNull();
-  });
-
-  it("should display Ronald and Marc first, then Bruno and Henri after sorting by First Name, then Ronald and scott when sorting by first name again", () => {
+  it("should display Ronald and Marc with 2 rows per page ", () => {
     render(<Table data={EMPLOYEES} skipFirstKey possibleRows={[2]} />);
 
     expect(screen.getByText(/Ronald/i)).toBeTruthy();
     expect(screen.getByText(/Marc/i)).toBeTruthy();
+  });
 
+  it("with 2 rows per page, should display Bruno and Henri after sorting by First Name, then Ronald and scott when sorting by first name again", () => {
+    render(<Table data={EMPLOYEES} skipFirstKey possibleRows={[2]} />);
     const firstNameKey = screen.getByText(/First name/i);
-
     fireEvent.click(firstNameKey);
 
     // expect(screen.findByText(/Bruno/i)).toBeTruthy();
