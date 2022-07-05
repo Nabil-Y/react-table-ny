@@ -142,6 +142,7 @@ const Table = (props: CustomTable) => {
           {pages.map((item) => (
             <button
               key={"page" + item}
+              title={"Page " + item}
               onClick={() => setPage(item)}
               className={page === item ? "selected-page" : ""}
             >
@@ -161,8 +162,12 @@ const Table = (props: CustomTable) => {
           rows per page
           {showPageSelector && (
             <ul className="rows-list">
-              {possibleRowsPerPage.map((item) => (
-                <li key={"rows" + item} onMouseDown={selectRowsPerPage}>
+              {possibleRowsPerPage.map((item, index) => (
+                <li
+                  key={"rows" + item}
+                  onMouseDown={selectRowsPerPage}
+                  title={"Choice " + (index + 1)}
+                >
                   {item}
                 </li>
               ))}

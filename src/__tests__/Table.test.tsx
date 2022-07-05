@@ -66,7 +66,7 @@ describe("On render with appropriate data", () => {
     expect(screen.getByText(/Marc/i)).toBeTruthy();
   });
 
-  it("with 2 rows per page, should display Bruno and Henri after sorting by First Name, then Ronald and scott when sorting by first name again", async () => {
+  it("Should sort by asc order after sorting once by First Name, then by des order after sorting twice by first name, then by asc order after sorting thrice by first name", async () => {
     render(<Table data={EMPLOYEES} skipFirstKey possibleRows={[2]} />);
 
     fireEvent.click(screen.getByText(/First name/i), {
@@ -88,5 +88,45 @@ describe("On render with appropriate data", () => {
     expect(screen.queryByText(/Bruno/i)).toBeNull();
     expect(screen.getByText(/Ronald/i)).toBeTruthy();
     expect(screen.getByText(/First name/i).className).toBe("sorted-des");
+
+    fireEvent.click(screen.getByText(/First name/i), {
+      target: {
+        innerText: "First Name",
+      },
+    });
+    await screen.findByText(/Bruno/i);
+    expect(screen.getByText(/First name/i).className).toBe("sorted-asc");
+  });
+
+  it("it should display athe fourth employee (Scott) after selecting four rows per page", async () => {
+    render(<Table data={EMPLOYEES} possibleRows={[2, 3, 4, 5]} />);
+
+    fireEvent.focus(screen.getByTitle(/Select/i));
+    await screen.findByTitle(/Choice 3/i);
+    fireEvent.mouseDown(screen.getByTitle(/Choice 3/), {
+      target: { innerText: "4" },
+    });
+    fireEvent.blur(screen.getByTitle(/Select/i));
+    await screen.findByText(/Scott/i);
+    expect(screen.getByText(/Scott/i)).toBeTruthy();
+  });
+
+  it("it should hide rows options when select button is blurred", async () => {
+    render(<Table data={EMPLOYEES} possibleRows={[2, 3, 4, 5]} />);
+
+    fireEvent.focus(screen.getByTitle(/Select/i));
+    await screen.findByTitle(/Choice 3/i);
+    fireEvent.blur(screen.getByTitle(/Select/i));
+    expect(screen.queryByTitle(/Choice 3/i)).toBeNull();
+  });
+
+  it("it should change the page when clicking on a new page", async () => {
+    render(<Table data={EMPLOYEES} possibleRows={[2, 3, 4, 5]} />);
+
+    fireEvent.click(screen.getByTitle(/Page 2/i), {
+      target: { innerText: "2" },
+    });
+    await screen.findByText("Showing 3/4 from 5");
+    expect(screen.getByText(/Scott/i)).toBeTruthy();
   });
 });
