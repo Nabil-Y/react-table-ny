@@ -49,6 +49,10 @@ ul {
   padding-left: 0;
 }
 
+th {
+  cursor: pointer;
+}
+
 td,
 th {
   padding: 0.5rem;
@@ -75,6 +79,12 @@ table {
 
 .rows-selector {
   position: relative;
+}
+
+@media screen and (max-width: 640px) {
+  .rows-selector {
+    margin-bottom: 2rem;
+  }
 }
 
 .rows-list {

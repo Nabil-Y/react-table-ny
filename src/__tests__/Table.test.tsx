@@ -43,6 +43,22 @@ describe("On render with appropriate data", () => {
     expect(screen.queryByText(/Id/i)).toBeNull();
   });
 
+  it("with title='random title', it should display a heading with random title as text ", () => {
+    render(<Table data={EMPLOYEES} title="random title" />);
+
+    expect(screen.getByText(/random title/i)).toBeTruthy();
+  });
+
+  it("should display only Bruno after searching for 'Br'", async () => {
+    render(<Table data={EMPLOYEES} possibleRows={[2]} />);
+
+    const searchInput = screen.getByLabelText(/Search:/i) as HTMLInputElement;
+    fireEvent.change(searchInput, { target: { value: "br" } });
+
+    await screen.findByText(/Bruno/i);
+    expect(screen.getByText(/Bruno/i)).toBeTruthy();
+  });
+
   it("should display Ronald and Marc with 2 rows per page ", () => {
     render(<Table data={EMPLOYEES} skipFirstKey possibleRows={[2]} />);
 
@@ -53,20 +69,24 @@ describe("On render with appropriate data", () => {
   it("with 2 rows per page, should display Bruno and Henri after sorting by First Name, then Ronald and scott when sorting by first name again", async () => {
     render(<Table data={EMPLOYEES} skipFirstKey possibleRows={[2]} />);
 
-    fireEvent.click(screen.getByText(/First name/i));
-    // Ronald is null, Bruno is true
+    fireEvent.click(screen.getByText(/First name/i), {
+      target: {
+        innerText: "First Name",
+      },
+    });
+    await screen.findByText(/Bruno/i);
+    expect(screen.queryByText(/Ronald/i)).toBeNull();
+    expect(screen.getByText(/Bruno/i)).toBeTruthy();
+    expect(screen.getByText(/First name/i).className).toBe("sorted-asc");
 
-    // expect(screen.queryByText(/Ronald/i)).toBeNull();
-    // expect(await screen.findByText(/Bruno/i)).toBe(1);q
-    // expect(await screen.findByText(/Henri/i)).toBe(1);
-    // expect(screen.findByText(/First name/i)).toBe("1");
-
-    fireEvent.click(screen.getByText(/First name/i));
-    // Bruno is null, Scott or Ronald is true
-
-    // expect(screen.queryByText(/Bruno/i)?.innerText).toBeUndefined();
-    // expect(screen.queryByText(/Henri/i)?.innerText).toBeUndefined();
-    // expect(screen.findByText(/Ronald/i)).toBeTruthy();
-    // expect(screen.findByText(/Scott/i)).toBeTruthy();
+    fireEvent.click(screen.getByText(/First name/i), {
+      target: {
+        innerText: "First Name",
+      },
+    });
+    await screen.findByText(/Ronald/i);
+    expect(screen.queryByText(/Bruno/i)).toBeNull();
+    expect(screen.getByText(/Ronald/i)).toBeTruthy();
+    expect(screen.getByText(/First name/i).className).toBe("sorted-des");
   });
 });

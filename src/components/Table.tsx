@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { CustomTable } from "../types/types";
 import { sortByKey } from "../utils/helpers";
 
@@ -26,14 +26,21 @@ const Table = (props: CustomTable) => {
     firstDataKeys.shift();
   }
 
-  // Filter data with search input
+  // Search
   const [query, setQuery] = useState("");
 
-  const filteredData = validatedData.filter((item) =>
-    Object.values(item).toString().toLowerCase().includes(query.toLowerCase())
+  const filteredData = useMemo(
+    () =>
+      validatedData.filter((item) =>
+        Object.values(item)
+          .toString()
+          .toLowerCase()
+          .includes(query.toLowerCase())
+      ),
+    [query]
   );
 
-  //sort handler
+  // Sorting
   const [sortLabel, setSortLabel] = useState("");
   const [order, setOrder] = useState("");
   const [isSorted, setIsSorted] = useState(false);
@@ -50,11 +57,13 @@ const Table = (props: CustomTable) => {
     }
   };
 
-  // Setup pagination
+  // Pages
   const possibleRowsPerPage =
-    possibleRows && possibleRows.length > 0
+    possibleRows &&
+    possibleRows.length > 0 &&
+    possibleRows.every((item) => typeof item === "number")
       ? possibleRows.slice(0, 4)
-      : [2, 20, 50, 100];
+      : [2, 3, 4, 5];
 
   const [page, setPage] = useState(1);
   const [showPageSelector, setShowPageSelector] = useState(false);
@@ -66,19 +75,18 @@ const Table = (props: CustomTable) => {
   const startOfPage = (page - 1) * rowsPerPage;
   const endOfPage = startOfPage + rowsPerPage;
 
-  // select rows per page function
   const selectRowsPerPage = (event: React.MouseEvent<HTMLLIElement>) => {
     const rows = +event.currentTarget.innerText;
     setRowPerPages(rows);
     setPage(1);
   };
 
-  // final operations for table data
-  const processedData = isSorted
-    ? sortByKey(filteredData, sortLabel, order).slice(startOfPage, endOfPage)
-    : filteredData.slice(startOfPage, endOfPage);
+  // Display Table
+  const finalTableData = useMemo(
+    () => (isSorted ? sortByKey(filteredData, sortLabel, order) : filteredData),
+    [isSorted, sortLabel, order, filteredData, sortByKey]
+  );
 
-  // display table
   return (
     <section className={`table ${customClasses}`}>
       <header>
@@ -89,7 +97,7 @@ const Table = (props: CustomTable) => {
             id="searchbar"
             type="text"
             value={query}
-            onChange={(e) => setQuery(e.target.value)}
+            onChange={(event) => setQuery(event.target.value)}
           />
         </div>
       </header>
@@ -114,7 +122,7 @@ const Table = (props: CustomTable) => {
           </tr>
         </thead>
         <tbody>
-          {processedData.map((item, index) => (
+          {finalTableData.slice(startOfPage, endOfPage).map((item, index) => (
             <tr key={Math.random() + index}>
               {firstDataKeys.map((value) => (
                 <td key={value + index}>{item[value]}</td>
