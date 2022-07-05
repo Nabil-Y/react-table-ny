@@ -63,7 +63,7 @@ const Table = (props: CustomTable) => {
     possibleRows.length > 0 &&
     possibleRows.every((item) => typeof item === "number")
       ? possibleRows.slice(0, 4)
-      : [2, 3, 4, 5];
+      : [10, 25, 50, 100];
 
   const [page, setPage] = useState(1);
   const [showPageSelector, setShowPageSelector] = useState(false);
