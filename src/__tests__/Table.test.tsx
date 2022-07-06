@@ -49,6 +49,12 @@ describe("On render with appropriate data", () => {
     expect(screen.getByText(/random title/i)).toBeTruthy();
   });
 
+  it("with customClasses='class', Table should have class='table class'", () => {
+    render(<Table data={EMPLOYEES} customClasses="class" />);
+
+    expect(screen.getByTestId(/table/i).className).toBe("table class");
+  });
+
   it("should display only Bruno after searching for 'Br'", async () => {
     render(<Table data={EMPLOYEES} possibleRows={[2]} />);
 
@@ -98,35 +104,53 @@ describe("On render with appropriate data", () => {
     expect(screen.getByText(/First name/i).className).toBe("sorted-asc");
   });
 
-  it("it should display athe fourth employee (Scott) after selecting four rows per page", async () => {
+  it("it should display the fourth employee (Scott) after selecting four rows per page", async () => {
     render(<Table data={EMPLOYEES} possibleRows={[2, 3, 4, 5]} />);
 
-    fireEvent.focus(screen.getByTitle(/Select/i));
-    await screen.findByTitle(/Choice 3/i);
-    fireEvent.mouseDown(screen.getByTitle(/Choice 3/), {
+    fireEvent.focus(screen.getByTestId(/Select/i));
+    await screen.findByTestId(/Choice 3/i);
+    fireEvent.mouseDown(screen.getByTestId(/Choice 3/), {
       target: { innerText: "4" },
     });
-    fireEvent.blur(screen.getByTitle(/Select/i));
+    fireEvent.blur(screen.getByTestId(/Select/i));
     await screen.findByText(/Scott/i);
     expect(screen.getByText(/Scott/i)).toBeTruthy();
-  });
-
-  it("it should hide rows options when select button is blurred", async () => {
-    render(<Table data={EMPLOYEES} possibleRows={[2, 3, 4, 5]} />);
-
-    fireEvent.focus(screen.getByTitle(/Select/i));
-    await screen.findByTitle(/Choice 3/i);
-    fireEvent.blur(screen.getByTitle(/Select/i));
-    expect(screen.queryByTitle(/Choice 3/i)).toBeNull();
   });
 
   it("it should change the page when clicking on a new page", async () => {
     render(<Table data={EMPLOYEES} possibleRows={[2, 3, 4, 5]} />);
 
-    fireEvent.click(screen.getByTitle(/Page 2/i), {
+    fireEvent.click(screen.getByTestId(/Page 2/i), {
       target: { innerText: "2" },
     });
     await screen.findByText("Showing 3/4 from 5");
     expect(screen.getByText(/Scott/i)).toBeTruthy();
+  });
+
+  it("it should go back to first page after selecting new value for rows per page", async () => {
+    render(<Table data={EMPLOYEES} possibleRows={[2, 3, 4, 5]} />);
+
+    fireEvent.click(screen.getByTestId(/Page 2/i), {
+      target: { innerText: "2" },
+    });
+    await screen.findByText("Showing 3/4 from 5");
+    expect(screen.getByText(/Scott/i)).toBeTruthy();
+
+    fireEvent.focus(screen.getByTestId(/Select/i));
+    await screen.findByTestId(/Choice 4/i);
+    fireEvent.mouseDown(screen.getByTestId(/Choice 4/), {
+      target: { innerText: "5" },
+    });
+    await screen.findByText("Showing 1/5 from 5");
+    expect(screen.getByText(/Bruno/i)).toBeTruthy();
+  });
+
+  it("it should hide rows options when select button is blurred", async () => {
+    render(<Table data={EMPLOYEES} possibleRows={[2, 3, 4, 5]} />);
+
+    fireEvent.focus(screen.getByTestId(/Select/i));
+    await screen.findByTestId(/Choice 3/i);
+    fireEvent.blur(screen.getByTestId(/Select/i));
+    expect(screen.queryByTestId(/Choice 3/i)).toBeNull();
   });
 });

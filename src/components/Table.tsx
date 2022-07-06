@@ -88,7 +88,10 @@ const Table = (props: CustomTable) => {
   );
 
   return (
-    <section className={`table ${customClasses}`}>
+    <section
+      className={customClasses ? `table ${customClasses}` : "table"}
+      data-testid="table"
+    >
       <header>
         {title ? <h2>{title}</h2> : ""}
         <div className="search">
@@ -142,7 +145,7 @@ const Table = (props: CustomTable) => {
           {pages.map((item) => (
             <button
               key={"page" + item}
-              title={"Page " + item}
+              data-testid={"Page " + item}
               onClick={() => setPage(item)}
               className={page === item ? "selected-page" : ""}
             >
@@ -153,7 +156,7 @@ const Table = (props: CustomTable) => {
         <div className="rows-selector">
           Show{" "}
           <button
-            title="select"
+            data-testid="select"
             onFocus={() => setShowPageSelector(true)}
             onBlur={() => setShowPageSelector(false)}
           >
@@ -166,7 +169,7 @@ const Table = (props: CustomTable) => {
                 <li
                   key={"rows" + item}
                   onMouseDown={selectRowsPerPage}
-                  title={"Choice " + (index + 1)}
+                  data-testid={"Choice " + (index + 1)}
                 >
                   {item}
                 </li>
