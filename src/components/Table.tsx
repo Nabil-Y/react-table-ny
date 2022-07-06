@@ -2,6 +2,11 @@ import React, { useMemo, useState } from "react";
 import { CustomTable } from "../types/types";
 import { sortByKey } from "../utils/helpers";
 
+/**
+ * Table function
+ * @param props Table properties
+ * @returns Table component
+ */
 const Table = (props: CustomTable) => {
   const { data, skipFirstKey, title, className, possibleRows } = props;
 

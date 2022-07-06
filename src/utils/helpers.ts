@@ -1,3 +1,10 @@
+/**
+ * sortByKey function
+ * @param data data to be sorted
+ * @param key key to sort your data with
+ * @param order sorting order ("asc" | "des") only
+ * @returns sorted data array
+ */
 export const sortByKey = (
   data: Record<string, string>[],
   key: string,

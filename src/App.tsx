@@ -1,6 +1,10 @@
 import { EMPLOYEES } from "./data/testData";
 import Table from "./components/Table";
 
+/**
+ * App function
+ * @returns App component
+ */
 const App = () => {
   return (
     <Table
@@ -8,7 +12,7 @@ const App = () => {
       skipFirstKey
       title="Your custom Title"
       className="YourCustomClasses"
-      possibleRows={[1, 3, 4, 5]}
+      possibleRows={[1, 2, 3, 5]}
     />
   );
 };

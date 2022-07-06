@@ -1,3 +1,7 @@
+/**
+ * Mock data values for testing/demo purposes
+ */
+
 /* c8 ignore next */
 export const wrongData = ["five", "two", "three"];
 export const wrongDataObjects = [
