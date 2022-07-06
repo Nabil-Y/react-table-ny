@@ -3,7 +3,7 @@ import { CustomTable } from "../types/types";
 import { sortByKey } from "../utils/helpers";
 
 const Table = (props: CustomTable) => {
-  const { data, skipFirstKey, title, customClasses, possibleRows } = props;
+  const { data, skipFirstKey, title, className, possibleRows } = props;
 
   // Validation that data is an array
   if (!Array.isArray(data)) return <p>Input an Array</p>;
@@ -19,7 +19,12 @@ const Table = (props: CustomTable) => {
     (item) => Object.keys(item).toString() === firstDataKeys.toString()
   );
   if (!areObjectsOfSameType)
-    return <p>Make sure your objects have the same keys</p>;
+    return (
+      <p>
+        Make sure your objects have the same keys and that keys/values are of
+        type string
+      </p>
+    );
 
   // Skip first key of data array check
   if (skipFirstKey) {
@@ -89,7 +94,7 @@ const Table = (props: CustomTable) => {
 
   return (
     <section
-      className={customClasses ? `table ${customClasses}` : "table"}
+      className={className ? `table ${className}` : "table"}
       data-testid="table"
     >
       <header>
@@ -139,7 +144,7 @@ const Table = (props: CustomTable) => {
           <p>
             Showing {startOfPage + 1}/
             {endOfPage > filteredData.length ? filteredData.length : endOfPage}{" "}
-            from {filteredData.length}{" "}
+            from {filteredData.length} entries
           </p>
           Pages{" "}
           {pages.map((item) => (
@@ -162,7 +167,7 @@ const Table = (props: CustomTable) => {
           >
             {rowsPerPage}
           </button>{" "}
-          rows per page
+          {rowsPerPage === 1 ? "row" : "rows"} per page
           {showPageSelector && (
             <ul className="rows-list">
               {possibleRowsPerPage.map((item, index) => (

@@ -49,14 +49,14 @@ describe("On render with appropriate data", () => {
     expect(screen.getByText(/random title/i)).toBeTruthy();
   });
 
-  it("with customClasses='class', Table should have class='table class'", () => {
-    render(<Table data={EMPLOYEES} customClasses="class" />);
+  it("with className='class', Table should have class='table class'", () => {
+    render(<Table data={EMPLOYEES} className="class" />);
 
     expect(screen.getByTestId(/table/i).className).toBe("table class");
   });
 
   it("should display only Bruno after searching for 'Br'", async () => {
-    render(<Table data={EMPLOYEES} possibleRows={[2]} />);
+    render(<Table data={EMPLOYEES} possibleRows={[1]} />);
 
     const searchInput = screen.getByLabelText(/Search:/i) as HTMLInputElement;
     fireEvent.change(searchInput, { target: { value: "br" } });
@@ -123,7 +123,7 @@ describe("On render with appropriate data", () => {
     fireEvent.click(screen.getByTestId(/Page 2/i), {
       target: { innerText: "2" },
     });
-    await screen.findByText("Showing 3/4 from 5");
+    await screen.findByText("Showing 3/4 from 5 entries");
     expect(screen.getByText(/Scott/i)).toBeTruthy();
   });
 
@@ -133,7 +133,7 @@ describe("On render with appropriate data", () => {
     fireEvent.click(screen.getByTestId(/Page 2/i), {
       target: { innerText: "2" },
     });
-    await screen.findByText("Showing 3/4 from 5");
+    await screen.findByText("Showing 3/4 from 5 entries");
     expect(screen.getByText(/Scott/i)).toBeTruthy();
 
     fireEvent.focus(screen.getByTestId(/Select/i));
@@ -141,7 +141,7 @@ describe("On render with appropriate data", () => {
     fireEvent.mouseDown(screen.getByTestId(/Choice 4/), {
       target: { innerText: "5" },
     });
-    await screen.findByText("Showing 1/5 from 5");
+    await screen.findByText("Showing 1/5 from 5 entries");
     expect(screen.getByText(/Bruno/i)).toBeTruthy();
   });
 
