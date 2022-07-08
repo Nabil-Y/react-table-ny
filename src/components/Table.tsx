@@ -11,30 +11,31 @@ const Table = (props: CustomTable) => {
   const { data, skipFirstKey, title, className, possibleRows } = props;
 
   // Validation that data is an array
-  if (!Array.isArray(data)) return <p>Input an Array</p>;
+  const isDataArray = useMemo(() => Array.isArray(data), [data]);
+
+  const validatedData = useMemo(
+    () => (isDataArray ? [...data] : [{ error: "error" }]),
+    [data, isDataArray]
+  );
 
   // Validate that data is an array of object
-  const isDataObjects = data.every((item) => typeof item === "object");
-  if (!isDataObjects) return <p>Input an array of objects</p>;
+  const isDataObjects = useMemo(
+    () => validatedData.every((item) => typeof item === "object"),
+    [validatedData]
+  );
 
   // Validate that objects in the array have the same keys
-  const validatedData = [...data];
-  const firstDataKeys = Object.keys(validatedData[0]);
-  const areObjectsOfSameType = validatedData.every(
-    (item) => Object.keys(item).toString() === firstDataKeys.toString()
+  const firstDataKeys = useMemo(
+    () => Object.keys(validatedData[0]),
+    [validatedData]
   );
-  if (!areObjectsOfSameType)
-    return (
-      <p>
-        Make sure your objects have the same keys and that keys/values are of
-        type string
-      </p>
-    );
-
-  // Skip first key of data array check
-  if (skipFirstKey) {
-    firstDataKeys.shift();
-  }
+  const areDataObjectsOfSameType = useMemo(
+    () =>
+      validatedData.every(
+        (item) => Object.keys(item).toString() === firstDataKeys.toString()
+      ),
+    [validatedData, firstDataKeys]
+  );
 
   // Search
   const [query, setQuery] = useState("");
@@ -47,7 +48,7 @@ const Table = (props: CustomTable) => {
           .toLowerCase()
           .includes(query.toLowerCase())
       ),
-    [query]
+    [query, validatedData]
   );
 
   // Sorting
@@ -55,6 +56,10 @@ const Table = (props: CustomTable) => {
   const [order, setOrder] = useState("");
   const [isSorted, setIsSorted] = useState(false);
 
+  /**
+   * sortHandler function
+   * @param event Mouse Event containing sort label
+   */
   const sortHandler = (event: React.MouseEvent<HTMLElement>) => {
     const label = event.currentTarget.innerText;
     setIsSorted(true);
@@ -79,12 +84,19 @@ const Table = (props: CustomTable) => {
   const [showPageSelector, setShowPageSelector] = useState(false);
   const [rowsPerPage, setRowPerPages] = useState(possibleRowsPerPage[0]);
 
-  const numberOfPages = Math.ceil(filteredData.length / rowsPerPage);
+  const numberOfPages = useMemo(
+    () => Math.ceil(filteredData.length / rowsPerPage),
+    [filteredData, rowsPerPage]
+  );
   const pages = [];
   for (let i = 0; i < numberOfPages; i++) pages.push(i + 1);
   const startOfPage = (page - 1) * rowsPerPage;
   const endOfPage = startOfPage + rowsPerPage;
 
+  /**
+   * selectRowsPerPage function
+   * @param event Mouse event containing desired rows per page
+   */
   const selectRowsPerPage = (event: React.MouseEvent<HTMLLIElement>) => {
     const rows = +event.currentTarget.innerText;
     setRowPerPages(rows);
@@ -94,8 +106,18 @@ const Table = (props: CustomTable) => {
   // Display Table
   const finalTableData = useMemo(
     () => (isSorted ? sortByKey(filteredData, sortLabel, order) : filteredData),
-    [isSorted, sortLabel, order, filteredData, sortByKey]
+    [isSorted, sortLabel, order, filteredData]
   );
+
+  if (!isDataArray) return <p>Input an array</p>;
+  if (!isDataObjects) return <p>Input an array of objects</p>;
+  if (!areDataObjectsOfSameType)
+    return (
+      <p>
+        Make sure your objects have the same keys and that keys/values are of
+        type string
+      </p>
+    );
 
   return (
     <section
@@ -117,29 +139,33 @@ const Table = (props: CustomTable) => {
       <table>
         <thead>
           <tr>
-            {firstDataKeys.map((item, index) => (
-              <th
-                key={item + index}
-                onClick={(event) => sortHandler(event)}
-                className={
-                  sortLabel === item && order === "asc"
-                    ? "sorted-asc"
-                    : sortLabel === item && order === "des"
-                    ? "sorted-des"
-                    : ""
-                }
-              >
-                {item}
-              </th>
-            ))}
+            {(skipFirstKey ? firstDataKeys.slice(1) : firstDataKeys).map(
+              (item, index) => (
+                <th
+                  key={item + index}
+                  onClick={(event) => sortHandler(event)}
+                  className={
+                    sortLabel === item && order === "asc"
+                      ? "sorted-asc"
+                      : sortLabel === item && order === "des"
+                      ? "sorted-des"
+                      : ""
+                  }
+                >
+                  {item}
+                </th>
+              )
+            )}
           </tr>
         </thead>
         <tbody>
           {finalTableData.slice(startOfPage, endOfPage).map((item, index) => (
             <tr key={Math.random() + index}>
-              {firstDataKeys.map((value) => (
-                <td key={value + index}>{item[value]}</td>
-              ))}
+              {(skipFirstKey ? firstDataKeys.slice(1) : firstDataKeys).map(
+                (value) => (
+                  <td key={value + index}>{item[value]}</td>
+                )
+              )}
             </tr>
           ))}
         </tbody>
@@ -149,7 +175,8 @@ const Table = (props: CustomTable) => {
           <p>
             Showing {startOfPage + 1}/
             {endOfPage > filteredData.length ? filteredData.length : endOfPage}{" "}
-            from {filteredData.length} entries
+            from {filteredData.length}{" "}
+            {finalTableData.length === 1 ? "entry" : "entries"}
           </p>
           Pages{" "}
           {pages.map((item) => (

@@ -32,7 +32,7 @@ button {
   overflow: hidden;
   cursor: pointer;
   border: none;
-  padding: 4px 8px;
+  padding: 5px 10px;
   margin: 2px;
 }
 
@@ -98,7 +98,7 @@ table {
 
 .rows-list li {
   cursor: pointer;
-  padding: 5px;
+  padding: 5px 10px;
 }
 
 .rows-list li:last-child {
