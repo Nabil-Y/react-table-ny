@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from "react";
 import { CustomTable } from "../types/types";
 import { sortByKey } from "../utils/helpers";
+import "./Table.css";
 
 /**
  * Table function
@@ -121,7 +122,7 @@ const Table = (props: CustomTable) => {
 
   return (
     <section
-      className={className ? `table ${className}` : "table"}
+      className={className ? `react-table ${className}` : "react-table"}
       data-testid="table"
     >
       <header>

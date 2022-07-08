@@ -1,0 +1,138 @@
+/*
+  1 - Generic tags
+  2 - Classes
+*/
+
+/* 1 - Generic tags */
+
+.react-table *,
+.react-table *::before,
+.react-table *::after {
+  box-sizing: border-box;
+}
+
+.react-table {
+  font-family: inherit;
+  padding: 1rem;
+  max-width: 1200px;
+}
+
+.react-table header,
+.react-table footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+@media screen and (max-width: 640px) {
+  .react-table header,
+  .react-table footer {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+.react-table input {
+  outline: none;
+}
+
+.react-table table {
+  display: block;
+  padding: 1rem;
+  overflow-x: scroll;
+  white-space: nowrap;
+}
+
+.react-table td,
+.react-table th {
+  padding: 0.5rem;
+  text-align: center;
+}
+
+.react-table th {
+  cursor: pointer;
+}
+
+.react-table button {
+  background: #ccc;
+  border-radius: 2px;
+  overflow: hidden;
+  cursor: pointer;
+  border: none;
+  padding: 5px 10px;
+  margin: 2px;
+}
+
+.react-table button:hover {
+  background: #a09f9f;
+}
+
+.react-table ul {
+  list-style: none;
+  padding-left: 0;
+  position: absolute;
+  display: flex;
+  overflow: hidden;
+  background: #ccc;
+  border-radius: 2px;
+  margin-left: 1.5rem;
+}
+
+.react-table ul li {
+  cursor: pointer;
+  padding: 5px 10px;
+}
+
+.react-table ul li:last-child {
+  padding-bottom: 2px;
+}
+
+.react-table ul li:hover {
+  background: #a09f9f;
+}
+
+/* 2 - Classes */
+
+.react-table .search,
+.react-table .page-selector,
+.react-table .rows-selector {
+  padding: 1rem;
+}
+
+.react-table .rows-selector {
+  position: relative;
+}
+
+@media screen and (max-width: 640px) {
+  .react-table .rows-selector {
+    margin-bottom: 2rem;
+  }
+}
+.react-table .sorted-asc,
+.react-table .sorted-des {
+  position: relative;
+}
+
+.react-table .sorted-asc::after,
+.react-table .sorted-des::after {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: -3px;
+  font-size: 8px;
+}
+
+.react-table .sorted-asc::after {
+  content: "▲";
+}
+
+.react-table .sorted-des::after {
+  content: "▼";
+}
+
+.react-table .selected-page {
+  background-color: transparent;
+  font-weight: bold;
+  pointer-events: none;
+}

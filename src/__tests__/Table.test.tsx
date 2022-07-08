@@ -49,10 +49,10 @@ describe("On render with appropriate data", () => {
     expect(screen.getByText(/random title/i)).toBeTruthy();
   });
 
-  it("with className='class', Table should have class='table class'", () => {
+  it("with className='class', Table should have class='react-table class'", () => {
     render(<Table data={EMPLOYEES} className="class" />);
 
-    expect(screen.getByTestId(/table/i).className).toBe("table class");
+    expect(screen.getByTestId(/table/i).className).toBe("react-table class");
   });
 
   it("should display only Bruno after searching for 'Br'", async () => {

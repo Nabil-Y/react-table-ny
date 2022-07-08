@@ -1,7 +1,28 @@
 {
   "name": "react-table-ny",
-  "private": true,
-  "version": "0.0.0",
+  "description": "React component to display data in a table. Done with TypeScript. Fully responsive and tested. Can be styled.",
+  "version": "1.0.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Nabil-Y/react-table-ny.git"
+  },
+  "author": "nabil-y",
+  "keywords": [
+    "react-table-ny",
+    "react-table",
+    "react",
+    "table",
+    "data-table",
+    "react-data",
+    "typescript",
+    "tsx",
+    "ts"
+  ],
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Nabil-Y/react-table-ny/issues"
+  },
+  "homepage": "https://github.com/Nabil-Y/react-table-ny",
   "scripts": {
     "dev": "vite --host",
     "build": "tsc && vite build",
