@@ -56,6 +56,7 @@
     "eslint-plugin-react": "^7.30.1",
     "eslint-plugin-react-hooks": "^4.6.0",
     "jsdom": "^20.0.0",
+    "readme-md-generator": "^1.0.0",
     "typescript": "^4.7.4",
     "vite": "^2.9.9",
     "vite-dts": "^1.0.4",
