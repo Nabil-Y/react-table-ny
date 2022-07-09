@@ -2,6 +2,17 @@
   "name": "react-table-ny",
   "description": "React component to display data in a table. Done with TypeScript. Fully responsive and tested. Can be styled.",
   "version": "1.0.0",
+  "main": "./dist/umd.js",
+  "module": "./dist/es.js",
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": {
+      "import": "./dist/es.js",
+      "require": "./dist/umd.js"
+    }
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/Nabil-Y/react-table-ny.git"
@@ -45,8 +56,10 @@
     "eslint-plugin-react": "^7.30.1",
     "eslint-plugin-react-hooks": "^4.6.0",
     "jsdom": "^20.0.0",
-    "typescript": "^4.6.3",
+    "typescript": "^4.7.4",
     "vite": "^2.9.9",
+    "vite-dts": "^1.0.4",
+    "vite-plugin-libcss": "^1.0.5",
     "vitest": "^0.16.0"
   }
 }
