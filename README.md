@@ -9,7 +9,7 @@
 
 ### 🏠 [Homepage](https://github.com/Nabil-Y/react-table-ny)
 
-### ✨ [Docs](react-table-ny-docs.vercel.app)
+### ✨ [Docs](https://react-table-ny-docs.vercel.app)
 
 ## Install
 

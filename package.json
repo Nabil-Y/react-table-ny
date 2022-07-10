@@ -38,7 +38,7 @@
   "bugs": {
     "url": "https://github.com/Nabil-Y/react-table-ny/issues"
   },
-  "homepage": "https://github.com/Nabil-Y/react-table-ny",
+  "homepage": "https://react-table-ny-docs.vercel.app",
   "scripts": {
     "dev": "vite --host",
     "build": "tsc && vite build",
