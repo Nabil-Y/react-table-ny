@@ -1,7 +1,7 @@
 {
   "name": "react-table-ny",
   "description": "React component to display data in a table. Done with TypeScript. Fully responsive and tested. Can be styled.",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "main": "./dist/umd.js",
   "module": "./dist/es.js",
   "files": [
